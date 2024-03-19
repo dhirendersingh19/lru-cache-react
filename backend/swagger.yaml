@@ -1,0 +1,64 @@
+swagger: "2.0"
+info:
+  description: LRU Cache API
+  version: "1.0.0"
+  title: LRU Cache
+
+basePath: /lru-cache/v1
+
+schemes:
+  - http
+
+definitions:
+  CacheItem:
+    type: object
+    properties:
+      key:
+        type: string
+        description: The key to store
+      value:
+        type: string
+        description: The value to store
+  CacheResponse:
+    type: object
+    properties:
+      value:
+        type: string
+        description: The retrieved value (for GET)
+
+paths:
+  /get/{id}:
+    get:
+      summary: Get value from cache
+      description: Retrieves the value associated with the provided key from the cache.
+      operationId: lrucache.get
+      parameters:
+      - in: path
+        name: id
+        description: The key to retrieve the value for
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Successful retrieval
+          schema:
+            $ref: '#/definitions/CacheResponse'
+        '404':
+          description: Key not found in cache
+  /set:
+    post:
+      summary: Set a key-value pair in the cache
+      description: Stores a key-value pair in the cache.
+      operationId: lrucache.post
+      parameters:
+        - description: Stores a key-value pair in the cache.
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/CacheItem'
+      produces: 
+        - application/json
+      responses:
+        '201':
+          description: Key-value pair successfully stored
